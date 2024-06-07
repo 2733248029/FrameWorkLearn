@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace FrameworkDesign.Example
 {
-    public struct StartGameCommand : ICommand
+    public class StartGameCommand : AbstractCommand
     {
-        public void Execute()
+        protected override void OnExecute()
         {
-            GameStartEvent.Trigger();
+            this.SendEvent<GameStartEvent>(); 
         }
     }
 }

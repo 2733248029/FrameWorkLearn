@@ -9,7 +9,8 @@ namespace CounterAPP
 
         protected override void Init()
         {
-            Register<IStorage>(new PlayerPrefsStorage());
+            RegisterSystem<ISystem>(new AchievementSystem());
+            RegisterUtility<IStorage>(new PlayerPrefsStorage());
             RegisterModel<ICounterModel>(new CounterModel());
         }
     }

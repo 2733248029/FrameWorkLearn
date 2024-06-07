@@ -1,30 +1,34 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CounterAPP;
 using FrameworkDesign;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CounterAPP
 {
-    public class CounterViewController : MonoBehaviour
+    public class CounterViewController : MonoBehaviour,IController
     {
         private ICounterModel mCounterModel;
+
+       
         private void Start()
         {
-            mCounterModel = CounterApp.Get<ICounterModel>();
+            mCounterModel = this.GetModel<ICounterModel>();
             mCounterModel.Count.OnValueChanged += OnCountChanged;
             OnCountChanged(mCounterModel.Count.Value);
             transform.Find("BtnAdd").GetComponent<Button>().onClick.AddListener(() =>
             {
                 //½»»¥Âß¼­
-                new AddCountCommand().Execute();
+                this.SendCommand<AddCountCommand>();
+              
               
             });
             transform.Find("BtnSub").GetComponent<Button>().onClick.AddListener(() =>
             {
                 //½»»¥Âß¼­
-                new SubCountCommand().Execute();
+                this.SendCommand<SubCountCommand>();
 
             });
             
@@ -46,29 +50,39 @@ namespace CounterAPP
             mCounterModel.Count.OnValueChanged -= OnCountChanged;
             mCounterModel = null;
         }
+
+         IArchitecture IBelongToArchitecture. GetArchitecture()
+        {
+           return  CounterApp.Interface;
+        }
+
     }
+}
     public interface ICounterModel:IModel
     {
         BindableProperty<int> Count { get; }
     }
-    public  class CounterModel: ICounterModel
+    public  class CounterModel:AbstractModel, ICounterModel
     {
 
         public  BindableProperty<int> Count { get; } = new BindableProperty<int>()
         {
             Value = 0,
         };
-        public IArchitecture Architecture { get; set; }
+        public IArchitecture Architecture { get; set; } 
 
-        public void Init()
+
+
+    protected override void OnInit()
+    {
+        
+        var storage = this.GetUtility<IStorage>();
+        Count.Value = storage.LoadInt("COUNTER_COUNT");
+        Count.OnValueChanged += count =>
         {
-            var storage = Architecture.GetUtility<IStorage>();
-            Count.Value = storage.LoadInt("COUNTER_COUNT");
-            Count.OnValueChanged += count =>
-            {
-                storage.SaveInt("COUNTER_COUNT", count);
-            };
-        }
+            storage.SaveInt("COUNTER_COUNT", count);
+        };
     }
-
 }
+
+

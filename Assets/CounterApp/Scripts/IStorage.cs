@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using FrameworkDesign;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
 namespace CounterAPP
 {
-    public interface IStorage
+    public interface IStorage:IUtility
     {
         void SaveInt(string key, int value);
         int LoadInt(string key,int defaultValue = 0);

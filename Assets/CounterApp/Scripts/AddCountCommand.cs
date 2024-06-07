@@ -6,10 +6,10 @@ using CounterAPP;
 using FrameworkDesign;
 
 
-public struct AddCountCommand : FrameworkDesign.ICommand
+public class AddCountCommand : AbstractCommand
 {
-    public void Execute()
+    protected override void OnExecute()
     {
-        CounterApp.Get<ICounterModel>().Count.Value++;
+        this.GetModel<ICounterModel>().Count.Value++;
     }
 }

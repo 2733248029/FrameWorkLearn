@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace FrameworkDesign
 {
-    public interface IBelongToArchitecture
+    public interface ICanSetArchitecture
     {
-        IArchitecture GetArchitecture();
+        void SetArchitecture(IArchitecture architecture);
     }
 }
 

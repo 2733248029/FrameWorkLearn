@@ -3,27 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace FrameworkDesign
 {
-    public interface IModel : IBelongToArchitecture,ICanSetArchitecture,ICanGetUtility,ICanSendEvent
+    public interface ISystem:IBelongToArchitecture,ICanSetArchitecture, ICanGetModel,ICanGetUtility,ICanSendEvent,ICanRegisterEvent
     {
         void Init();
     }
-    public abstract class AbstractModel:IModel
+    public abstract class AbstractSystem : ISystem
     {
         private IArchitecture mArchitecture = null;
-        IArchitecture  IBelongToArchitecture.GetArchitecture() 
+         IArchitecture IBelongToArchitecture. GetArchitecture()
         {
             return mArchitecture;
         }
-        void IModel.Init()
-        {
-            OnInit();
-        }
-        protected abstract void OnInit();
 
          void ICanSetArchitecture.SetArchitecture(IArchitecture architecture)
         {
             mArchitecture = architecture;
         }
+
+        void ISystem.Init()
+        {
+            OnInit();
+        }
+
+        protected abstract void OnInit();
     }
 }
 
