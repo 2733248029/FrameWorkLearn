@@ -63,16 +63,7 @@ namespace FrameworkDesign
 
         }
         protected abstract void Init();
-        public static T Get<T>()where T:class
-        {
-            MakeSureArchitecture();
-            return mArchitecture.mContainer.Get<T>();
-        }
-        public static void Register<T>(T instance) where T: class
-        {
-            MakeSureArchitecture();
-            mArchitecture.mContainer.Register<T>(instance);
-        }
+
         public void RegisterModel<T>(T model) where T : IModel
         {
             model.SetArchitecture(this) ;

@@ -16,7 +16,7 @@ namespace CounterAPP
         private void Start()
         {
             mCounterModel = this.GetModel<ICounterModel>();
-            mCounterModel.Count.OnValueChanged += OnCountChanged;
+            mCounterModel.Count.RegisterOnvalueChanged(OnCountChanged);
             OnCountChanged(mCounterModel.Count.Value);
             transform.Find("BtnAdd").GetComponent<Button>().onClick.AddListener(() =>
             {
@@ -47,7 +47,7 @@ namespace CounterAPP
         }
         private void OnDestroy()
         {
-            mCounterModel.Count.OnValueChanged -= OnCountChanged;
+            mCounterModel.Count.UnRegisterOnvalueChanged(OnCountChanged) ;
             mCounterModel = null;
         }
 
@@ -78,10 +78,10 @@ namespace CounterAPP
         
         var storage = this.GetUtility<IStorage>();
         Count.Value = storage.LoadInt("COUNTER_COUNT");
-        Count.OnValueChanged += count =>
+        Count.RegisterOnvalueChanged( count =>
         {
             storage.SaveInt("COUNTER_COUNT", count);
-        };
+        });
     }
 }
 

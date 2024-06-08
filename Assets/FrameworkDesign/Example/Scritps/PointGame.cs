@@ -7,7 +7,11 @@ namespace FrameworkDesign.Example
     {
         protected override void Init()
         {
-            Register<IGameModel>(new GameModel());
+            RegisterSystem<IAchievementSystem>(new AchievementSystem());
+            RegisterSystem<ICountDownSystem>(new CountDownSystem());
+            RegisterSystem<IScoreSystem>(new ScoreSystem());
+            RegisterModel<IGameModel>(new GameModel());
+            RegisterUtility<IStorage>(new PlayerPrefsStorage());
         }
     }
 }

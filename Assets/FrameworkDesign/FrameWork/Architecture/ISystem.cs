@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace FrameworkDesign
 {
-    public interface ISystem:IBelongToArchitecture,ICanSetArchitecture, ICanGetModel,ICanGetUtility,ICanSendEvent,ICanRegisterEvent
+    public interface ISystem:IBelongToArchitecture,ICanSetArchitecture, ICanGetModel,ICanGetUtility,ICanSendEvent,ICanRegisterEvent,ICanGetSystem
     {
         void Init();
     }

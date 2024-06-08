@@ -1,24 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using FrameworkDesign;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-
 namespace FrameworkDesign.Example
 {
-    public class Enemy : MonoBehaviour,IController
+    public class ErrorArea : MonoBehaviour, IController
     {
-         IArchitecture IBelongToArchitecture. GetArchitecture()
+        public IArchitecture GetArchitecture()
         {
             return PointGame.Interface;
         }
-
         private void OnMouseDown()
         {
-
-            gameObject.SetActive(false);
-            this.SendCommand<KillEnemyCommand>();
+            Debug.Log("µ„¥Ì¡À");
+            //Destroy(gameObject);
+            this.SendCommand<MissCommand>();
         }
+
     }
 }
-
 

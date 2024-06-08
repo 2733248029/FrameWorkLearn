@@ -11,10 +11,16 @@ public class UI : MonoBehaviour,IController
     void Awake()
     {
         this.RegisterEvent<GamePassEvent>(onGamePass);
+        this.RegisterEvent<OnCountDownEvent>(e => 
+        {
+            transform.Find("Canvas/GamePanel").gameObject.SetActive(false);
+            transform.Find("Canvas/GameOverPanel").gameObject.SetActive(true);
+        }).UnRegisterWhenGameObjectDestroyed(gameObject);
     }
 
     private void onGamePass(GamePassEvent e)
     {
+        transform.Find("Canvas/GamePanel").gameObject.SetActive(false);
         transform.Find("Canvas/GamePassPanel").gameObject.SetActive(true);
     }
     private void OnDestroy()

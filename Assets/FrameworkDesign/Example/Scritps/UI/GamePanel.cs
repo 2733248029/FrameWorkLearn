@@ -7,9 +7,10 @@ using UnityEngine.UI;
 
 namespace FrameworkDesign.Example
 {
-    public class GameStartPanel : MonoBehaviour,IController
+    public class GamePanel : MonoBehaviour,IController
     {
         private IGameModel mGameModel;
+        private ICountDownSystem mCountDownSystem;
          IArchitecture IBelongToArchitecture. GetArchitecture()
         {
             return PointGame.Interface;
@@ -18,25 +19,20 @@ namespace FrameworkDesign.Example
         // Start is called before the first frame update
         void Start()
         {
-            transform.Find("BtnStart").GetComponent<Button>()
-                .onClick.AddListener(() => 
-                {
-                    gameObject.SetActive(false);
-                    this.SendCommand<StartGameCommand>();
-                });
-            transform.Find("BtnBuyLife").GetComponent<Button>()
-                .onClick.AddListener(() =>
-            {
-                this.SendCommand<BuyLifeCommand>();
-            });
+            mCountDownSystem = this.GetSystem<ICountDownSystem>();
             mGameModel = this.GetModel<IGameModel>();
+            mGameModel.Score.RegisterOnvalueChanged(OnScoreValueChanged);
             mGameModel.Gold.RegisterOnvalueChanged(OnGoldValueChanged);
             mGameModel.Life.RegisterOnvalueChanged(OnLifeValueChanged);
+            OnScoreValueChanged(mGameModel.Score.Value);
             OnGoldValueChanged(mGameModel.Gold.Value);
             OnLifeValueChanged(mGameModel.Life.Value);
-            transform.Find("BestScoreText").GetComponent<Text>().text = "最高分:" + mGameModel.BestScore.Value;
+            transform.Find("ScoreText").GetComponent<Text>().text = "分数:" + mGameModel.Score.Value;
         }
-
+        private void OnScoreValueChanged(int score)
+        {
+            transform.Find("ScoreText").GetComponent<Text>().text = "分数:" + score;
+        }
         private void OnLifeValueChanged(int life)
         {
             transform.Find("LifeText").GetComponent<Text>().text = "生命:" + life;
@@ -44,27 +40,25 @@ namespace FrameworkDesign.Example
 
         private void OnGoldValueChanged(int gold)
         {
-            Debug.Log(gold);
-            if(gold>0)
-            {
-                transform.Find("BtnBuyLife").gameObject.SetActive(true);
-            }
-            else
-            {
-                transform.Find("BtnBuyLife").gameObject.SetActive(false);
-            }
             transform.Find("GoldText").GetComponent<Text>().text = "金币" + gold;
         }
         private void OnDestroy()
         {
+            mGameModel.Score.UnRegisterOnvalueChanged(OnScoreValueChanged);
             mGameModel.Gold.UnRegisterOnvalueChanged(OnGoldValueChanged);
             mGameModel.Life.UnRegisterOnvalueChanged(OnLifeValueChanged);
             mGameModel = null;
+            mCountDownSystem = null;
         }
         // Update is called once per frame
         void Update()
         {
-
+            if(Time.frameCount%20==0)
+            {
+                transform.Find("CountDownText").GetComponent<Text>().text =
+                    mCountDownSystem.CurrentRemainSeconds + "s";
+                mCountDownSystem.Update();
+            }
         }
     }
 }
